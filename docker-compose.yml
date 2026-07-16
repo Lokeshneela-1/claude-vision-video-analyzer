@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  claude-video-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: claude-video-analyzer
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - FRAME_INTERVAL=${FRAME_INTERVAL:-2}
+      - OUTPUT_DIR=/app/output_frames
+    volumes:
+      - ./videos:/app/videos:ro
+      - ./output_frames:/app/output_frames:rw
+      - ./.env:/app/.env:ro
+    working_dir: /app
+    command: python main.py --video /app/videos/test_video.mp4
+    # Uncomment for interactive mode:
+    # stdin_open: true
+    # tty: true
+    restart: no
