@@ -1,4 +1,4 @@
-opencv-python==4.10.1.26
+opencv-python==5.0.0.93
 ffmpeg-python==0.2.1
 python-dotenv==1.0.1
 pydantic==2.8.2
