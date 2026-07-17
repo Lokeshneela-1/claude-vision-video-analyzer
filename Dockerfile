@@ -1,7 +1,7 @@
 # ================================
 # Stage 1: Builder
 # ================================
-FROM python:3.12-slim as builder
+FROM python:3.14-slim as builder
 
 WORKDIR /app
 
@@ -22,7 +22,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # ================================
 # Stage 2: Runtime
 # ================================
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 # Build arguments for metadata
 ARG BUILD_DATE
