@@ -10,9 +10,12 @@ import os
 from pathlib import Path
 from datetime import datetime
 import io
+import hashlib
 
 from analyzer import VideoAnalyzer
 from utils import print_info, print_error, print_success
+from video_index import VideoIndex
+from chatbot import VideoChatbot
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024  # 500MB max file size
@@ -23,10 +26,21 @@ app.config['OUTPUT_FOLDER'] = 'output_frames'
 Path(app.config['UPLOAD_FOLDER']).mkdir(exist_ok=True)
 Path(app.config['OUTPUT_FOLDER']).mkdir(exist_ok=True)
 
+# Initialize video index and chatbot
+print_info("Initializing Video Index and Chatbot...")
+video_index = VideoIndex()
+chatbot = VideoChatbot(video_index)
+print_success("✅ Chatbot ready!")
+
 ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mov', 'mkv', 'flv', 'wmv'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def generate_video_id(filename):
+    """Generate unique ID for video based on filename and timestamp"""
+    unique_str = f"{filename}_{datetime.now().isoformat()}"
+    return hashlib.md5(unique_str.encode()).hexdigest()[:16]
 
 @app.route('/')
 def index():
@@ -80,9 +94,23 @@ def upload_video():
             
             print_success(f"Analysis complete: {filename}")
             
+            # Generate video ID and index the analysis for chatbot
+            video_id = generate_video_id(saved_filename)
+            try:
+                print_info("Indexing video analysis for chatbot...")
+                video_index.index_video_analysis(
+                    video_id=video_id,
+                    video_path=filepath,
+                    analysis_results=results
+                )
+                print_success("✅ Video indexed for Q&A!")
+            except Exception as idx_error:
+                print_error(f"Warning: Failed to index video: {idx_error}")
+            
             return jsonify({
                 'success': True,
                 'results': results,
+                'video_id': video_id,  # Return video_id for chatbot
                 'message': 'Video analysis completed successfully'
             }), 200
             
@@ -134,6 +162,129 @@ def download_results(video_name):
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+# ========================================
+# CHATBOT ENDPOINTS ⭐ NEW
+# ========================================
+
+@app.route('/api/chat', methods=['POST'])
+def chat_with_video():
+    """Chat with analyzed video"""
+    try:
+        data = request.json
+        video_id = data.get('video_id')
+        question = data.get('question')
+        
+        if not video_id or not question:
+            return jsonify({'error': 'video_id and question are required'}), 400
+        
+        # Get answer from chatbot
+        result = chatbot.answer_question(video_id, question)
+        
+        return jsonify({
+            'success': True,
+            'answer': result['answer'],
+            'timestamps': result['timestamps'],
+            'frames': result['frames'],
+            'confidence': result['confidence'],
+            'relevant_frames': result.get('relevant_frames', [])
+        }), 200
+        
+    except Exception as e:
+        print_error(f"Chat error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/summary/<video_id>', methods=['GET'])
+def get_video_summary(video_id):
+    """Get AI-generated summary of video"""
+    try:
+        summary = chatbot.get_video_summary(video_id)
+        return jsonify({
+            'success': True,
+            'summary': summary,
+            'video_id': video_id
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/suggestions/<video_id>', methods=['GET'])
+def get_suggested_questions(video_id):
+    """Get suggested questions for video"""
+    try:
+        suggestions = chatbot.suggest_questions(video_id)
+        return jsonify({
+            'success': True,
+            'suggestions': suggestions,
+            'video_id': video_id
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/conversation/<video_id>', methods=['GET'])
+def get_conversation(video_id):
+    """Get conversation history for video"""
+    try:
+        conversation = chatbot.memory.get_conversation(video_id)
+        return jsonify({
+            'success': True,
+            'conversation': conversation,
+            'video_id': video_id
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/export-conversation/<video_id>', methods=['GET'])
+def export_conversation(video_id):
+    """Export conversation to text file"""
+    try:
+        filepath = chatbot.export_conversation(video_id)
+        return send_file(
+            filepath,
+            as_attachment=True,
+            download_name=f'conversation_{video_id}.txt'
+        )
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/videos', methods=['GET'])
+def list_videos():
+    """List all indexed videos"""
+    try:
+        video_ids = video_index.list_indexed_videos()
+        return jsonify({
+            'success': True,
+            'videos': video_ids,
+            'count': len(video_ids)
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+# ========================================
+# END CHATBOT ENDPOINTS
+# ========================================
 
 @app.route('/api/status', methods=['GET'])
 def status():
