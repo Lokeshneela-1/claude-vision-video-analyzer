@@ -12,6 +12,7 @@
         }
 
         :root {
+            --eli-lilly-red: #D1002F;
             --eli-lilly-blue: #003DA5;
             --eli-lilly-light-blue: #0057B8;
             --eli-lilly-dark-blue: #002560;
@@ -21,6 +22,9 @@
             --neutral-gray: #F5F5F5;
             --text-dark: #1a1a1a;
             --border-light: #E0E0E0;
+            --chat-bg: #FAFBFC;
+            --user-bubble: linear-gradient(135deg, #D1002F 0%, #B10029 100%);
+            --bot-bubble: linear-gradient(135deg, #003DA5 0%, #0057B8 100%);
         }
 
         body {
@@ -402,6 +406,387 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Chat Panel */
+        .chat-panel {
+            position: fixed;
+            right: 0;
+            top: 80px;
+            bottom: 0;
+            width: 450px;
+            background: white;
+            box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-panel.open {
+            transform: translateX(0);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--eli-lilly-red) 0%, #B10029 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-chat {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-chat:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .chat-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: var(--chat-bg);
+        }
+
+        .chat-welcome {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .chat-welcome-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .chat-welcome h4 {
+            color: var(--eli-lilly-blue);
+            margin-bottom: 8px;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .message-bot {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-user .message-bubble {
+            background: var(--user-bubble);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-bot .message-bubble {
+            background: white;
+            color: var(--text-dark);
+            border: 1px solid var(--border-light);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .message-bot .message-time {
+            text-align: left;
+        }
+
+        .timestamp-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--eli-lilly-blue) 0%, var(--eli-lilly-light-blue) 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .timestamp-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 61, 165, 0.3);
+        }
+
+        .frame-preview {
+            margin-top: 8px;
+            border-radius: 8px;
+            overflow: hidden;
+            max-width: 200px;
+        }
+
+        .frame-preview img {
+            width: 100%;
+            display: block;
+            border: 2px solid var(--border-light);
+            border-radius: 6px;
+        }
+
+        .suggested-questions {
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-light);
+        }
+
+        .suggested-questions h5 {
+            color: var(--eli-lilly-blue);
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .suggestion-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            background: var(--neutral-gray);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .suggestion-btn:hover {
+            background: #E8F0FF;
+            border-color: var(--eli-lilly-blue);
+            transform: translateX(4px);
+        }
+
+        .chat-input-area {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .chat-action-btn {
+            flex: 1;
+            padding: 8px;
+            background: var(--neutral-gray);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .chat-action-btn:hover {
+            background: var(--eli-lilly-blue);
+            color: white;
+            border-color: var(--eli-lilly-blue);
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--border-light);
+            border-radius: 24px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            border-color: var(--eli-lilly-blue);
+            box-shadow: 0 0 0 3px rgba(0, 61, 165, 0.1);
+        }
+
+        .send-btn {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--eli-lilly-red) 0%, #B10029 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(209, 0, 47, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 18px;
+            width: fit-content;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--eli-lilly-blue);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        .chat-toggle-btn {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--eli-lilly-red) 0%, #B10029 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(209, 0, 47, 0.4);
+            transition: all 0.3s;
+            z-index: 998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(209, 0, 47, 0.5);
+        }
+
+        .chat-toggle-btn.has-notification::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            background: var(--success-green);
+            border-radius: 50%;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        .video-summary {
+            background: linear-gradient(135deg, #E8F0FF 0%, #F0F4FF 100%);
+            border-left: 4px solid var(--eli-lilly-blue);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .video-summary h5 {
+            color: var(--eli-lilly-blue);
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .video-summary p {
+            color: var(--text-dark);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
@@ -428,6 +813,19 @@
 
             .btn {
                 width: 100%;
+            }
+
+            .chat-panel {
+                width: 100%;
+                top: 60px;
+            }
+
+            .chat-toggle-btn {
+                right: 20px;
+                bottom: 20px;
+                width: 56px;
+                height: 56px;
+                font-size: 24px;
             }
         }
     </style>
@@ -478,6 +876,11 @@
                 <div class="feature-icon">🤖</div>
                 <h3>AI-Powered</h3>
                 <p>Uses Claude's advanced vision model for deep scene understanding and analysis.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Interactive Chatbot</h3>
+                <p>Ask questions about your videos with conversation memory. Get instant answers with timestamps.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
@@ -536,6 +939,56 @@
         </section>
     </div>
 
+    <!-- Chat Panel -->
+    <div id="chatPanel" class="chat-panel">
+        <div class="chat-header">
+            <h3>
+                <span>💬</span>
+                Ask About This Video
+            </h3>
+            <button class="close-chat" onclick="toggleChat()">×</button>
+        </div>
+        
+        <div class="chat-content" id="chatContent">
+            <div class="chat-welcome">
+                <div class="chat-welcome-icon">🤖</div>
+                <h4>Hi! I'm your video assistant</h4>
+                <p>Upload and analyze a video, then ask me anything about it!</p>
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <div class="chat-actions">
+                <button class="chat-action-btn" onclick="getVideoSummary()" id="summaryBtn">
+                    📊 Summary
+                </button>
+                <button class="chat-action-btn" onclick="exportConversation()" id="exportBtn">
+                    💾 Export
+                </button>
+                <button class="chat-action-btn" onclick="clearChat()" id="clearBtn">
+                    🗑️ Clear
+                </button>
+            </div>
+            <div class="chat-input-wrapper">
+                <input 
+                    type="text" 
+                    class="chat-input" 
+                    id="chatInput" 
+                    placeholder="Ask a question about the video..."
+                    disabled
+                >
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                    ➤
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()">
+        💬
+    </button>
+
     <footer>
         <p><strong>Claude Video Analyzer</strong> • Enterprise Edition</p>
         <p>Developed for Eli Lilly | Powered by Claude AI</p>
@@ -555,6 +1008,14 @@
         const processingStatus = document.getElementById('processingStatus');
         const resultsSection = document.getElementById('resultsSection');
         const statusText = document.getElementById('statusText');
+        const chatPanel = document.getElementById('chatPanel');
+        const chatContent = document.getElementById('chatContent');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatToggleBtn = document.getElementById('chatToggleBtn');
+        
+        let currentVideoId = null;
+        let currentAnalysisResults = null;
 
         // Drag and drop
         dragDropArea.addEventListener('click', () => fileInput.click());
@@ -580,85 +1041,316 @@
             }
         });
 
+        // Chat input enter key
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !sendBtn.disabled) {
+                sendMessage();
+            }
+        });
+
         function handleFile(file) {
             console.log('File selected:', file.name);
             processingStatus.style.display = 'flex';
+            processingStatus.classList.remove('success', 'error');
             processingStatus.classList.add('processing');
-            statusText.textContent = `Processing ${file.name}...`;
+            statusText.textContent = `Analyzing ${file.name}...`;
+            resultsSection.classList.remove('active');
 
-            // Simulate processing
-            setTimeout(() => {
-                displayMockResults(file.name);
-            }, 2000);
+            const formData = new FormData();
+            formData.append('video', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                displayResults(data);
+                currentVideoId = data.video_id;
+                enableChat();
+                loadSuggestedQuestions();
+                chatToggleBtn.classList.add('has-notification');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                processingStatus.classList.remove('processing');
+                processingStatus.classList.add('error');
+                statusText.textContent = `Error: ${error.message}`;
+            });
         }
 
-        function displayMockResults(fileName) {
+        function displayResults(data) {
             processingStatus.classList.remove('processing');
             processingStatus.classList.add('success');
-            statusText.textContent = 'Analysis complete!';
+            statusText.textContent = 'Analysis complete! ✓';
             resultsSection.classList.add('active');
+            currentAnalysisResults = data;
 
             // Update stats
-            document.getElementById('framesCount').textContent = '12';
-            document.getElementById('processingTime').textContent = '45s';
-            document.getElementById('videoDuration').textContent = '2m 30s';
+            document.getElementById('framesCount').textContent = data.frames_analyzed || 0;
+            document.getElementById('processingTime').textContent = (data.processing_time || 0).toFixed(1) + 's';
+            document.getElementById('videoDuration').textContent = formatDuration(data.video_duration || 0);
 
-            // Display mock results
+            // Display results
             const resultsList = document.getElementById('resultsList');
-            resultsList.innerHTML = `
-                <div class="result-card">
-                    <div class="timestamp">Frame 1 (0:00) - Claude Analysis</div>
-                    <div class="analysis">
-                        ✓ Objects: People (2), Monitor, Desk, Office furniture<br>
-                        ✓ Actions: Two people discussing, pointing at monitor<br>
-                        ✓ Setting: Modern office environment with professional ambiance<br>
-                        ✓ Overall: Collaborative meeting environment
-                    </div>
-                </div>
-                <div class="result-card">
-                    <div class="timestamp">Frame 2 (0:12) - Claude Analysis</div>
-                    <div class="analysis">
-                        ✓ Objects: People (2), Multiple monitors, Whiteboard with diagrams<br>
-                        ✓ Actions: Presenting findings, recording data<br>
-                        ✓ Setting: Conference room with technical presentation setup<br>
-                        ✓ Overall: Professional business presentation
-                    </div>
-                </div>
-                <div class="result-card">
-                    <div class="timestamp">Frame 3 (0:24) - Claude Analysis</div>
-                    <div class="analysis">
-                        ✓ Objects: Documents, Charts, Graphs, Coffee cups<br>
-                        ✓ Actions: Reviewing documents, taking notes<br>
-                        ✓ Setting: Meeting room with documentation materials<br>
-                        ✓ Overall: Documentation review and analysis session
-                    </div>
-                </div>
-            `;
+            resultsList.innerHTML = '';
+            
+            if (data.frames && data.frames.length > 0) {
+                data.frames.forEach((frame, index) => {
+                    const resultCard = document.createElement('div');
+                    resultCard.className = 'result-card';
+                    resultCard.innerHTML = `
+                        <div class="timestamp">Frame ${frame.frame_number} (${frame.timestamp}) - Claude Analysis</div>
+                        <div class="analysis">${formatAnalysis(frame.analysis)}</div>
+                    `;
+                    resultsList.appendChild(resultCard);
+                });
+            }
+        }
+
+        function formatDuration(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}m ${secs}s`;
+        }
+
+        function formatAnalysis(analysis) {
+            if (typeof analysis === 'object') {
+                return Object.entries(analysis)
+                    .map(([key, value]) => `✓ <strong>${key}:</strong> ${value}`)
+                    .join('<br>');
+            }
+            return `✓ ${analysis}`;
         }
 
         function downloadResults() {
-            const results = {
-                video: 'analysis.mp4',
-                frames_analyzed: 12,
-                processing_time: 45,
-                timestamp: new Date().toISOString(),
-                frames: [
-                    {
-                        frame_number: 1,
-                        timestamp: '0:00',
-                        analysis: 'Objects: People (2), Monitor, Desk, Office furniture...'
-                    }
-                ]
-            };
+            if (!currentAnalysisResults) return;
             
-            const dataStr = JSON.stringify(results, null, 2);
+            const dataStr = JSON.stringify(currentAnalysisResults, null, 2);
             const dataBlob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(dataBlob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'analysis_results.json';
+            link.download = `analysis_${currentVideoId}.json`;
             link.click();
             URL.revokeObjectURL(url);
+        }
+
+        // ============ CHAT FUNCTIONS ============
+
+        function toggleChat() {
+            chatPanel.classList.toggle('open');
+            chatToggleBtn.classList.remove('has-notification');
+            if (chatPanel.classList.contains('open')) {
+                chatInput.focus();
+            }
+        }
+
+        function enableChat() {
+            chatInput.disabled = false;
+            sendBtn.disabled = false;
+            chatInput.placeholder = 'Ask a question about the video...';
+            
+            // Clear welcome message and show ready state
+            chatContent.innerHTML = `
+                <div class="video-summary">
+                    <h5>📹 Video Analyzed Successfully!</h5>
+                    <p>Your video has been analyzed and indexed. Ask me anything about what you see in the video.</p>
+                </div>
+            `;
+        }
+
+        function addMessage(text, isUser = false, data = {}) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'message-user' : 'message-bot'}`;
+            
+            let timestampHTML = '';
+            if (data.timestamps && data.timestamps.length > 0) {
+                timestampHTML = '<div style="margin-top: 8px;">' +
+                    data.timestamps.map(ts => 
+                        `<span class="timestamp-badge" onclick="jumpToTimestamp('${ts}')">${ts}</span>`
+                    ).join('') +
+                    '</div>';
+            }
+
+            let frameHTML = '';
+            if (data.frame_preview) {
+                frameHTML = `
+                    <div class="frame-preview">
+                        <img src="${data.frame_preview}" alt="Frame preview">
+                    </div>
+                `;
+            }
+
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="message-bubble">
+                    <div>${text}</div>
+                    ${timestampHTML}
+                    ${frameHTML}
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            
+            chatContent.appendChild(messageDiv);
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message message-bot';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            chatContent.appendChild(typingDiv);
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        async function sendMessage() {
+            const question = chatInput.value.trim();
+            if (!question || !currentVideoId) return;
+
+            // Add user message
+            addMessage(question, true);
+            chatInput.value = '';
+            chatInput.disabled = true;
+            sendBtn.disabled = true;
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        video_id: currentVideoId,
+                        question: question
+                    })
+                });
+
+                const data = await response.json();
+                removeTypingIndicator();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                // Add bot response
+                addMessage(data.answer, false, {
+                    timestamps: data.timestamps || [],
+                    frame_preview: data.frame_preview
+                });
+
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage(`Sorry, I encountered an error: ${error.message}`, false);
+            } finally {
+                chatInput.disabled = false;
+                sendBtn.disabled = false;
+                chatInput.focus();
+            }
+        }
+
+        async function loadSuggestedQuestions() {
+            if (!currentVideoId) return;
+
+            try {
+                const response = await fetch(`/api/suggestions/${currentVideoId}`);
+                const data = await response.json();
+
+                if (data.suggestions && data.suggestions.length > 0) {
+                    const suggestionsDiv = document.createElement('div');
+                    suggestionsDiv.className = 'suggested-questions';
+                    suggestionsDiv.innerHTML = `
+                        <h5>💡 Suggested Questions:</h5>
+                        ${data.suggestions.map(q => 
+                            `<button class="suggestion-btn" onclick="askSuggestion('${q.replace(/'/g, "\\'")}')">${q}</button>`
+                        ).join('')}
+                    `;
+                    chatContent.appendChild(suggestionsDiv);
+                    chatContent.scrollTop = chatContent.scrollHeight;
+                }
+            } catch (error) {
+                console.error('Error loading suggestions:', error);
+            }
+        }
+
+        function askSuggestion(question) {
+            chatInput.value = question;
+            sendMessage();
+        }
+
+        async function getVideoSummary() {
+            if (!currentVideoId) return;
+
+            showTypingIndicator();
+
+            try {
+                const response = await fetch(`/api/summary/${currentVideoId}`);
+                const data = await response.json();
+
+                removeTypingIndicator();
+
+                if (data.summary) {
+                    addMessage(data.summary, false);
+                }
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage(`Error getting summary: ${error.message}`, false);
+            }
+        }
+
+        async function exportConversation() {
+            if (!currentVideoId) return;
+
+            try {
+                const response = await fetch(`/api/export-conversation/${currentVideoId}`);
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `conversation_${currentVideoId}.txt`;
+                link.click();
+                URL.revokeObjectURL(url);
+
+                addMessage('✓ Conversation exported successfully!', false);
+            } catch (error) {
+                addMessage(`Error exporting: ${error.message}`, false);
+            }
+        }
+
+        function clearChat() {
+            if (confirm('Clear all chat messages? (This will not delete the stored conversation)')) {
+                chatContent.innerHTML = `
+                    <div class="video-summary">
+                        <h5>📹 Chat Cleared</h5>
+                        <p>Ask me anything about your video!</p>
+                    </div>
+                `;
+                loadSuggestedQuestions();
+            }
+        }
+
+        function jumpToTimestamp(timestamp) {
+            addMessage(`Looking at timestamp: ${timestamp}`, false);
+            // Future: integrate video player to jump to this timestamp
         }
     </script>
 </body>
