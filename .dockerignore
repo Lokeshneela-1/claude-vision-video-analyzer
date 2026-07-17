@@ -1,26 +1,92 @@
+# Git-related files
 .git
 .gitignore
-.env
-.DS_Store
-*.pyc
-__pycache__
-.pytest_cache
+.gitattributes
+
+# Python specific
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
 .venv
-venv
 env
-*.log
-output_frames
-videos
-.idea
-.vscode
+ENV/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.aws
+.azure
+
+# IDE and editor files
+.vscode/
+.idea/
 *.swp
 *.swo
 *~
-.coverage
-htmlcov
-dist
-build
-*.egg-info
-node_modules
-.env.local
-.env.*.local
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Documentation (not needed in container)
+docs/
+*.md
+!README.md
+
+# CI/CD
+.github/
+
+# Local development artifacts
+uploads/
+output_frames/
+videos/
+checkpoints/
+*.log
+logs/
+tmp/
+temp/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Session files
+session-state/
+.copilot/
+
+# Node modules (if any)
+node_modules/
+
+# Large test files
+*.mp4
+*.avi
+*.mov
+*.mkv
