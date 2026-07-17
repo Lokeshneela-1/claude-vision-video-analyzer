@@ -178,10 +178,31 @@ def internal_error(error):
     }), 500
 
 if __name__ == '__main__':
-    print_info("Starting Claude Video Analyzer Web UI...")
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Claude Video Analyzer Web UI')
+    parser.add_argument('--host', default='127.0.0.1', help='Host to bind to (default: 127.0.0.1, use 0.0.0.0 for network access)')
+    parser.add_argument('--port', type=int, default=5000, help='Port to bind to (default: 5000)')
+    parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    args = parser.parse_args()
+    
+    print_info("=" * 70)
+    print_info("Claude Video Analyzer - Web Application")
+    print_info("Eli Lilly Enterprise Edition")
+    print_info("=" * 70)
+    print_info(f"Starting server on {args.host}:{args.port}...")
+    print_info("")
+    print_info("Access the application at:")
+    print_info(f"  • Local:   http://localhost:{args.port}")
+    if args.host == '0.0.0.0':
+        print_info(f"  • Network: http://YOUR_IP_ADDRESS:{args.port}")
+    print_info("")
+    print_info("Press CTRL+C to stop the server")
+    print_info("=" * 70)
+    
     app.run(
-        host='0.0.0.0',
-        port=8000,
-        debug=False,
+        host=args.host,
+        port=args.port,
+        debug=args.debug,
         threaded=True
     )
