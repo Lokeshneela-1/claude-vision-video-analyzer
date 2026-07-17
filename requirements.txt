@@ -3,7 +3,7 @@ ffmpeg-python==0.2.1
 python-dotenv==1.0.1
 pydantic==2.8.2
 colorama==0.4.6
-tqdm==4.66.4
+tqdm==4.68.4
 Pillow==10.4.0
 anthropic>=0.18.1
 flask>=3.0.0
